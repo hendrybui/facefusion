@@ -3,7 +3,7 @@ import gradio
 
 def render() -> None:
 	"""Render image generator UI component"""
-	with gradio.Group(scale=1):
+	with gradio.Group():
 		with gradio.Row():
 			with gradio.Column(scale=1):
 				gradio.Markdown("### Image Generator (NSFW Disabled)")
