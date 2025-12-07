@@ -107,11 +107,12 @@ git pull origin newcherry
 
 ## Available Branches
 
-| Branch | Version | NSFW | UI Color | Features |
-|--------|---------|------|----------|----------|
-| `b2b` | v3.4.2 | Disabled | Teal | Stable, proven |
-| `newcherry` | v3.5.1 | Disabled | Default | Latest, all new features |
-| `master` | v3.4.2 | Enabled | Default | Your fork main |
+| Branch | Version | NSFW | UI Color | Status | Latest Commit |
+|--------|---------|------|----------|--------|---------------|
+| `newcherry` | v3.5.1 | Disabled | Default | ✅ Active | 3c33d04 |
+| `b2b` | v3.4.2 | Disabled | Teal | ✅ Stable | 65c9ca3 |
+| `master` | v3.4.2 | Enabled | Default | 📌 Fork Main | 81c5e85 |
+| `pinokio-config` | v3.4.2 | Enabled | Default | 🔧 Experimental | 176a1bf |
 
 ## Troubleshooting
 
