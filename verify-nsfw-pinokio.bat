@@ -39,15 +39,6 @@ if %ERRORLEVEL% EQU 0 (
 )
 echo.
 
-echo --- Checking image_generator.py ---
-findstr "NSFW_CHECK_DISABLED = True" facefusion\image_generator.py >nul 2>&1
-if %ERRORLEVEL% EQU 0 (
-    echo [OK] Image generator with NSFW disabled found
-) else (
-    echo [INFO] Image generator not found or needs update
-)
-echo.
-
 echo [3] Checking version...
 findstr "version" facefusion\metadata.py
 echo.
