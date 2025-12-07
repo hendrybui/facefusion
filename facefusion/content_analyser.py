@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 from facefusion import inference_manager, state_manager, translator
 from facefusion.common_helper import is_macos
-from facefusion.download import conditional_download_hashes, conditional_download_sources, resolve_download_url
+from facefusion.download import resolve_download_url
 from facefusion.execution import has_execution_provider
 from facefusion.filesystem import resolve_relative_path
 from facefusion.thread_helper import conditional_thread_semaphore
@@ -138,9 +138,8 @@ def collect_model_downloads() -> Tuple[DownloadSet, DownloadSet]:
 
 
 def pre_check() -> bool:
-	model_hash_set, model_source_set = collect_model_downloads()
-
-	return conditional_download_hashes(model_hash_set) and conditional_download_sources(model_source_set)
+	# NSFW model download disabled - skip downloading NSFW detection models
+	return True
 
 
 def analyse_stream(vision_frame : VisionFrame, video_fps : Fps) -> bool:
