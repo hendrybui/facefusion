@@ -1,14 +1,15 @@
-from typing import Optional
 import gradio
 
-from facefusion import image_generator as img_gen
 
-
-def render() -> gradio.Group:
+def render() -> None:
 	"""Render image generator UI component"""
-	with gradio.Group(label='Image Generator', open=False):
+	with gradio.Group(scale=1):
 		with gradio.Row():
-			prompt_input = gradio.Textbox(
+			with gradio.Column(scale=1):
+				gradio.Markdown("### Image Generator (NSFW Disabled)")
+
+		with gradio.Row():
+			gradio.Textbox(
 				label='Prompt',
 				placeholder='Describe the image you want to generate...',
 				lines=3
@@ -16,7 +17,7 @@ def render() -> gradio.Group:
 
 		with gradio.Row():
 			with gradio.Column(scale=1):
-				width_slider = gradio.Slider(
+				gradio.Slider(
 					label='Width',
 					value=512,
 					minimum=256,
@@ -25,7 +26,7 @@ def render() -> gradio.Group:
 				)
 
 			with gradio.Column(scale=1):
-				height_slider = gradio.Slider(
+				gradio.Slider(
 					label='Height',
 					value=512,
 					minimum=256,
@@ -35,7 +36,7 @@ def render() -> gradio.Group:
 
 		with gradio.Row():
 			with gradio.Column(scale=1):
-				steps_slider = gradio.Slider(
+				gradio.Slider(
 					label='Steps',
 					value=20,
 					minimum=1,
@@ -44,41 +45,19 @@ def render() -> gradio.Group:
 				)
 
 		with gradio.Row():
-			generate_button = gradio.Button('Generate Image', variant='primary')
+			with gradio.Column(scale=1):
+				gradio.Button('Support on Patreon', link='https://patreon.com')
+			with gradio.Column(scale=1):
+				gradio.Button('Support on Fund', link='https://fund.facefusion.io')
 
 		with gradio.Row():
-			output_image = gradio.Image(label='Generated Image', type='pil')
+			gradio.Image(label='Generated Image', type='pil')
+
 
 		with gradio.Row():
-			nsfw_status = gradio.Label(
-				value='NSFW Filtering: DISABLED ✓',
-				show_label=False
-			)
-
-	return gradio.Group(
-		prompt_input,
-		width_slider,
-		height_slider,
-		steps_slider,
-		generate_button,
-		output_image,
-		nsfw_status
-	)
+			gradio.Markdown('**NSFW Filtering: DISABLED ✓**')
 
 
 def listen() -> None:
 	"""Listen to image generator events"""
 	pass
-
-
-def on_generate_click(prompt: str, width: int, height: int, steps: int) -> Optional[str]:
-	"""Handle generate button click"""
-	if not prompt.strip():
-		return 'Please enter a prompt'
-
-	result = img_gen.generate_image(prompt, int(width), int(height), int(steps))
-
-	if result is None:
-		return 'Image generation failed or not configured'
-
-	return result
