@@ -1,3 +1,4 @@
 # Keep local modifications during merges - never overwrite with upstream
 facefusion/content_analyser.py merge=ours
+facefusion/core.py merge=ours
 pinokio.json merge=ours
