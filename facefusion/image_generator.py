@@ -7,7 +7,7 @@ from PIL import Image
 
 import numpy as np
 
-from facefusion import wording, logger
+from facefusion import logger
 from facefusion.types import DownloadScope, DownloadSet, ModelSet, VisionFrame
 
 NSFW_CHECK_DISABLED = True
@@ -37,7 +37,7 @@ def create_static_model_set(download_scope : DownloadScope) -> ModelSet:
 
 def pre_check() -> bool:
 	"""Pre-check for image generator - always passes since NSFW is disabled"""
-	logger.debug(wording.get('analyzing_files'), __name__)
+	logger.debug('Analyzing image generator files', __name__)
 	return True
 
 
@@ -62,7 +62,7 @@ def generate_image(prompt: str, width: int = 512, height: int = 512, steps: int 
 	Note: NSFW content filtering is DISABLED by default
 	"""
 	if not prompt:
-		logger.error(wording.get('invalid_input'), __name__)
+		logger.error('Invalid prompt input', __name__)
 		return None
 
 	# Validate inputs

@@ -1,7 +1,7 @@
 from typing import Optional
 import gradio
 
-from facefusion import image_generator
+from facefusion import image_generator as img_gen
 
 
 def render() -> gradio.Group:
@@ -76,7 +76,7 @@ def on_generate_click(prompt: str, width: int, height: int, steps: int) -> Optio
 	if not prompt.strip():
 		return 'Please enter a prompt'
 
-	result = image_generator.generate_image(prompt, int(width), int(height), int(steps))
+	result = img_gen.generate_image(prompt, int(width), int(height), int(steps))
 
 	if result is None:
 		return 'Image generation failed or not configured'
