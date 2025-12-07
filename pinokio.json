@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "description": "Pinokio config for facefusion - enable Claude Haiku 4.5 for all clients",
+  "defaults": {
+    "model": "claude-haiku-4.5",
+    "enabled": true
+  },
+  "clients": {
+    "*": {
+      "model": "claude-haiku-4.5",
+      "enabled": true
+    }
+  }
+}
