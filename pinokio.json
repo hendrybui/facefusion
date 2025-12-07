@@ -1,6 +1,26 @@
 {
   "version": "3.4.2",
-  "description": "Pinokio config for facefusion - enable Claude Haiku 4.5 for all clients",
+  "title": "FaceFusion (Custom b2b)",
+  "description": "FaceFusion v3.4.2 - NSFW disabled, Claude Haiku 4.5 enabled",
+  "icon": "icon.png",
+  "menu": async (kernel) => {
+    return [
+      {
+        "icon": "fa-solid fa-plug",
+        "text": "Install",
+        "href": "install.json"
+      },
+      {
+        "icon": "fa-solid fa-play",
+        "text": "Start",
+        "href": "start.json"
+      }
+    ]
+  },
+  "repository": {
+    "url": "https://github.com/hendrybui/facefusion.git",
+    "branch": "b2b"
+  },
   "defaults": {
     "model": "claude-haiku-4.5",
     "enabled": true
