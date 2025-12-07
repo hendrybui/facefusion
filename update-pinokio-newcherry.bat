@@ -21,6 +21,20 @@ echo Pulling latest changes...
 git pull origin newcherry
 
 echo.
+echo Installing/updating dependencies...
+pip install -r requirements.txt --upgrade --quiet
+pip install numpy==2.2.4 --force-reinstall --quiet
+
+echo.
+echo Testing FaceFusion startup...
+python -c "from facefusion import core; print('✓ FaceFusion loaded successfully')"
+if %ERRORLEVEL% EQU 0 (
+    echo [OK] All dependencies are installed
+) else (
+    echo [WARNING] Dependency check failed - check requirements.txt
+)
+
+echo.
 echo Update complete! Your Pinokio FaceFusion now uses:
 echo - Repository: https://github.com/hendrybui/facefusion.git
 echo - Branch: newcherry
@@ -32,5 +46,6 @@ echo NEW: Image Generator (Tools tab)
 echo - Text-to-image generation with NSFW disabled
 echo - Configurable dimensions: 256-1024px
 echo - Quality steps: 1-100
+echo - Support buttons for Patreon and Fund
 echo.
 pause

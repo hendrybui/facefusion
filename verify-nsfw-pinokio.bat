@@ -60,6 +60,15 @@ echo [5] Latest commits...
 git log --oneline -3
 echo.
 
+echo [6] Testing FaceFusion startup...
+python -c "from facefusion import core; print('✓ FaceFusion loaded successfully')"
+if %ERRORLEVEL% EQU 0 (
+    echo [OK] Application loads without errors
+) else (
+    echo [FAILED] Application failed to load - check dependencies
+)
+echo.
+
 echo ===================================================
 echo IMPORTANT: After verification, restart Pinokio!
 echo 1. Close Pinokio completely
