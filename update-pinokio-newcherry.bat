@@ -26,6 +26,11 @@ echo - Repository: https://github.com/hendrybui/facefusion.git
 echo - Branch: newcherry
 echo - Version: 3.5.1 (latest)
 echo - NSFW: Disabled
-echo - Features: Full v3.5.1 capabilities
+echo - Features: Full v3.5.1 capabilities + Image Generator
+echo.
+echo NEW: Image Generator (Tools tab)
+echo - Text-to-image generation with NSFW disabled
+echo - Configurable dimensions: 256-1024px
+echo - Quality steps: 1-100
 echo.
 pause
