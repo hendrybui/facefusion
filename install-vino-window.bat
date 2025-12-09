@@ -66,7 +66,7 @@ pip install imageio[ffmpeg] --quiet
 
 echo.
 echo [Step 6/6] Installing OpenVINO for optimized inference...
-pip install "openvino>=2024.0.0" "openvino-dev>=2024.0.0" --quiet
+pip install "openvino==2024.0.0" --quiet
 
 echo.
 echo Checking ffmpeg installation...
