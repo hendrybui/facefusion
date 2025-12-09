@@ -156,5 +156,5 @@ install-vino-window.bat
 
 ---
 
-**Updated:** December 9, 2025  
+**Updated:** December 9, 2025
 **Status:** Ready to Install ✅
