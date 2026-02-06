@@ -8,13 +8,17 @@
 # - Python virtual environment setup
 # - Latest stable repository clone
 # - GPU acceleration (NVIDIA CUDA 12.1 + cuDNN 8 OR AMD ROCm 6.0)
-# - AMD gfx803 architecture support
+# - AMD gfx803 architecture support (Vega/RX500 series)
 # - Dependency resolution and installation
 # - Precise requirements.txt generation
 # - NSFW filter disabled
 # - UI theme set to cyan
 # - Robust error handling and progress logging
 # - GPU verification
+#
+# GPU Support:
+# - NVIDIA: CUDA 12.1, cuDNN 8, onnxruntime-gpu
+# - AMD: ROCm 6.0, gfx803 architecture, PyTorch with ROCm
 ################################################################################
 
 set -e  # Exit on error
@@ -956,22 +960,34 @@ EOF
 create_startup_script() {
     log_step "Creating startup script..."
 
+    if [ "$GPU_TYPE" = "nvidia" ]; then
+        EXECUTION_PROVIDER="cuda"
+        ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6+PTX"
+        GPU_ENV="CUDA_VISIBLE_DEVICES=0"
+        GPU_ARCH_VAR="TORCH_CUDA_ARCH_LIST"
+    else
+        EXECUTION_PROVIDER="rocm"
+        ARCH_LIST="gfx803"
+        GPU_ENV="HIP_VISIBLE_DEVICES=0"
+        GPU_ARCH_VAR="TORCH_ROCM_ARCH"
+    fi
+
     cat > "$INSTALL_DIR/start.sh" << EOF
 #!/bin/bash
 
-# FaceFusion Startup Script with GPU Support
+# FaceFusion Startup Script with GPU Support ($GPU_TYPE)
 
 cd "\$(dirname "\$0")"
 
 # Activate virtual environment
 source .venv/bin/activate
 
-# Set environment variables
-export CUDA_VISIBLE_DEVICES=0
-export TORCH_CUDA_ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6+PTX"
+# Set environment variables for $GPU_TYPE GPU
+export $GPU_ENV=0
+export $GPU_ARCH_VAR="$ARCH_LIST"
 
 # Run FaceFusion
-python facefusion.py --open-browser --execution-providers cuda
+python facefusion.py --open-browser --execution-providers $EXECUTION_PROVIDER
 
 # Keep terminal open if there's an error
 if [ \$? -ne 0 ]; then
@@ -996,8 +1012,18 @@ print_summary() {
     echo -e "${CYAN}Installation Details:${NC}"
     echo "  - Location: $INSTALL_DIR"
     echo "  - Virtual Environment: $VENV_DIR"
-    echo "  - CUDA Version: $CUDA_VERSION"
-    echo "  - cuDNN Version: $CUDNN_VERSION"
+    echo "  - GPU Type: $GPU_TYPE"
+
+    if [ "$GPU_TYPE" = "nvidia" ]; then
+        echo "  - CUDA Version: $CUDA_VERSION"
+        echo "  - cuDNN Version: $CUDNN_VERSION"
+        EXECUTION_PROVIDER="cuda"
+    else
+        echo "  - ROCm Version: $ROCM_VERSION"
+        echo "  - GPU Architecture: gfx803 (AMD Vega/RX500 series)"
+        EXECUTION_PROVIDER="rocm"
+    fi
+
     echo "  - Python: $PYTHON_VERSION"
     echo "  - NSFW Filter: Disabled"
     echo "  - UI Theme: Cyan"
@@ -1008,7 +1034,7 @@ print_summary() {
     echo ""
     echo "  2. Run FaceFusion:"
     echo "     ${YELLOW}cd $INSTALL_DIR${NC}"
-    echo "     ${YELLOW}python facefusion.py --open-browser --execution-providers cuda${NC}"
+    echo "     ${YELLOW}python facefusion.py --open-browser --execution-providers $EXECUTION_PROVIDER${NC}"
     echo ""
     echo "  3. Or use the startup script:"
     echo "     ${YELLOW}$INSTALL_DIR/start.sh${NC}"
@@ -1026,11 +1052,24 @@ print_summary() {
     echo "     ${YELLOW}cd $INSTALL_DIR && python verify_gpu.py${NC}"
     echo ""
     echo -e "${CYAN}Troubleshooting:${NC}"
-    echo "  - If GPU is not detected, check NVIDIA drivers:"
-    echo "     ${YELLOW}nvidia-smi${NC}"
-    echo ""
-    echo "  - Check CUDA installation:"
-    echo "     ${YELLOW}nvcc --version${NC}"
+
+    if [ "$GPU_TYPE" = "nvidia" ]; then
+        echo "  - If GPU is not detected, check NVIDIA drivers:"
+        echo "     ${YELLOW}nvidia-smi${NC}"
+        echo ""
+        echo "  - Check CUDA installation:"
+        echo "     ${YELLOW}nvcc --version${NC}"
+    else
+        echo "  - If GPU is not detected, check ROCm drivers:"
+        echo "     ${YELLOW}rocm-smi${NC}"
+        echo ""
+        echo "  - Check ROCm installation:"
+        echo "     ${YELLOW}rocminfo${NC}"
+        echo ""
+        echo "  - Verify gfx803 architecture support:"
+        echo "     ${YELLOW}echo \$TORCH_ROCM_ARCH${NC}"
+    fi
+
     echo ""
     echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
     echo ""
@@ -1044,7 +1083,9 @@ main() {
     echo "║                                                              ║"
     echo "║       FaceFusion Installation Script with GPU Support        ║"
     echo "║                                                              ║"
-    echo "║       Ubuntu Linux - CUDA 12.1 - cuDNN 8                     ║"
+    echo "║       Ubuntu Linux - CUDA 12.1 / ROCm 6.0                    ║"
+    echo "║                                                              ║"
+    echo "║       NVIDIA & AMD GPU Support (gfx803)                     ║"
     echo "║                                                              ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
@@ -1059,7 +1100,15 @@ main() {
     # Run installation steps
     check_root
     check_system
-    check_nvidia
+    detect_gpu_type
+
+    # Check GPU based on detected type
+    if [ "$GPU_TYPE" = "nvidia" ]; then
+        check_nvidia
+    elif [ "$GPU_TYPE" = "amd" ]; then
+        check_amd
+    fi
+
     check_python
     create_install_dir
     create_venv
