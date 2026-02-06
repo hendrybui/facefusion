@@ -99,20 +99,20 @@ def launch() -> None:
 
 def get_theme() -> gradio.Theme:
 	return gradio.themes.Base(
-		primary_hue = gradio.themes.colors.red,
+		primary_hue = gradio.themes.colors.cyan,
 		secondary_hue = gradio.themes.Color(
 			name = 'neutral',
-			c50 = '#fafafa',
-			c100 = '#f5f5f5',
-			c200 = '#e5e5e5',
-			c300 = '#d4d4d4',
-			c400 = '#a3a3a3',
-			c500 = '#737373',
-			c600 = '#525252',
-			c700 = '#404040',
-			c800 = '#262626',
-			c900 = '#212121',
-			c950 = '#171717',
+			c50 = '#f0fdfa',
+			c100 = '#ccfbf1',
+			c200 = '#99f6e4',
+			c300 = '#5eead4',
+			c400 = '#2dd4bf',
+			c500 = '#14b8a6',
+			c600 = '#0d9488',
+			c700 = '#0f766e',
+			c800 = '#115e59',
+			c900 = '#134e4a',
+			c950 = '#042f2e',
 		),
 		radius_size = Size(
 			xxs = '0.375rem',

@@ -89,6 +89,49 @@ def resolve_cudnn_conv_algo_search() -> str:
 	return 'EXHAUSTIVE'
 
 
+def detect_cpu_execution_devices() -> List[ExecutionDevice]:
+	"""Detect CPU architecture for inference fallback."""
+	execution_devices : List[ExecutionDevice] = []
+
+	try:
+		import subprocess
+		# Try to detect CPU architecture
+		output = subprocess.check_output(['uname', '-m'], stderr=subprocess.DEVNULL).decode('utf-8').strip()
+		execution_devices.append(
+		{
+			'driver_version': 'N/A',
+			'framework':
+			{
+				'name': 'CPU',
+				'version': output
+			},
+			'product':
+			{
+				'vendor': 'Generic',
+				'name': 'CPU (gfx803 compatible)'
+			},
+			'video_memory':
+			{
+				'total': {'value': 0, 'unit': 'MB'},
+				'free': {'value': 0, 'unit': 'MB'}
+			},
+			'temperature':
+			{
+				'gpu': {'value': 0, 'unit': '°C'},
+				'memory': {'value': 0, 'unit': '°C'}
+			},
+			'utilization':
+			{
+				'gpu': {'value': 0, 'unit': '%'},
+				'memory': {'value': 0, 'unit': '%'}
+			}
+		})
+	except Exception:
+		pass
+
+	return execution_devices
+
+
 def resolve_openvino_device_type(execution_device_id : int) -> str:
 	if execution_device_id == 0:
 		return 'GPU'

@@ -3,6 +3,18 @@
 	overflow: unset;
 }
 
+:root:root:root:root .primary-color,
+:root:root:root:root .primary-color:hover
+{
+	background-color: #14b8a6 !important;
+}
+
+:root:root:root:root .accent-color,
+:root:root:root:root .accent-color:hover
+{
+	background-color: #2dd4bf !important;
+}
+
 :root:root:root:root main
 {
 	max-width: 110em;
